@@ -23,3 +23,8 @@
   padding: 3px 10px;
   display: flex;
 }
+
+.title{
+  text-align: center;
+  font-size: 3rem;
+}
