@@ -2,8 +2,24 @@ import Link from "next/Link";
 import HomeCss from "../styles/Home.module.css";
 import Image from "next/Image";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Home({ arrayPokemon2, tipos }) {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const itemAnimado = {
+    hidden: { opacity: 0, scale: 0 },
+    show: { opacity: 1, scale: 1 },
+  };
+
   const [pokemon, setPokemon] = useState(arrayPokemon2);
 
   const filtrar = (elTipo) => {
@@ -21,17 +37,26 @@ export default function Home({ arrayPokemon2, tipos }) {
           return nuevoPokemones;
         });
       setPokemon(nuevoPokemon);
-      console.log(nuevoPokemon)
+      console.log(nuevoPokemon);
     }
   };
   return (
     <>
       <div className={HomeCss.botonesTipo}>
-        <button className={HomeCss.botonFiltro} onClick={() => filtrar("borrar")}>Mostrar todos</button>
+        <button
+          className={HomeCss.botonFiltro}
+          onClick={() => filtrar("borrar")}
+        >
+          Mostrar todos
+        </button>
         <div className={HomeCss.listadoTipos}>
           {tipos.map((tipo) => {
             return (
-              <button className={`${HomeCss.botonFiltro} ${tipo.name}`} onClick={() => filtrar(tipo.name)} key={tipo.name}>
+              <button
+                className={`${HomeCss.botonFiltro} ${tipo.name}`}
+                onClick={() => filtrar(tipo.name)}
+                key={tipo.name}
+              >
                 {tipo.name}
               </button>
             );
@@ -39,9 +64,14 @@ export default function Home({ arrayPokemon2, tipos }) {
         </div>
       </div>
       <h1 className={HomeCss.title}>Pokedex</h1>
-      <ul className={HomeCss.columnas}>
+      <motion.ul
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className={HomeCss.columnas}
+      >
         {pokemon.map((pokemon) => (
-          <li key={pokemon.name}>
+          <motion.li variants={itemAnimado} key={pokemon.name}>
             <Link
               href={{
                 pathname: "/pokemon/[name]",
@@ -70,9 +100,9 @@ export default function Home({ arrayPokemon2, tipos }) {
                 </div>
               </a>
             </Link>
-          </li>
+          </motion.li>
         ))}
-      </ul>
+      </motion.ul>
     </>
   );
 }
@@ -82,7 +112,9 @@ export async function getServerSideProps() {
   const tipos = await traeTipos.json();
 
   const getPokemons = async (numero) => {
-    return fetch(`https://pokeapi.co/api/v2/pokemon/${numero}?limit=101&offset=0`)
+    return fetch(
+      `https://pokeapi.co/api/v2/pokemon/${numero}?limit=101&offset=0`
+    )
       .then((response) => response.json())
       .then((data) => data);
   };
