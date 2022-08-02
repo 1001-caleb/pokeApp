@@ -27,11 +27,11 @@ export default function Home({ arrayPokemon2, tipos }) {
   return (
     <>
       <div className={HomeCss.botonesTipo}>
-        <button onClick={() => filtrar("borrar")}>Mostrar todos</button>
+        <button className={HomeCss.botonFiltro} onClick={() => filtrar("borrar")}>Mostrar todos</button>
         <div className={HomeCss.listadoTipos}>
           {tipos.map((tipo) => {
             return (
-              <button onClick={() => filtrar(tipo.name)} key={tipo.name}>
+              <button className={`${HomeCss.botonFiltro} ${tipo.name}`} onClick={() => filtrar(tipo.name)} key={tipo.name}>
                 {tipo.name}
               </button>
             );
